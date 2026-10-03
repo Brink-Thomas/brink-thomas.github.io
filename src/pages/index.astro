@@ -1,0 +1,31 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+import { getEntry, render } from 'astro:content';
+
+const profile = await getEntry('profile', 'about');
+const { Content } = profile ? await render(profile) : { Content: null };
+---
+
+<Layout title="Thomas Brink | CV">
+  {profile ? (
+    <section>
+      <h1 style="font-size: 2.5rem; margin-bottom: 0.25rem;">{profile.data.name}</h1>
+      <p style="font-size: 1.25rem; color: var(--accent); margin-top: 0;">
+        {profile.data.role}
+      </p>
+      
+      <p style="color: var(--text-muted);">
+        {profile.data.email && <span>✉️ {profile.data.email} &bull; </span>}
+        {profile.data.github && <a href={profile.data.github} target="_blank">GitHub Profile</a>}
+      </p>
+      <hr style="border: 0; border-top: 1px solid var(--card); margin: 2rem 0;" />
+      
+      <article>
+        {Content && <Content />}
+      </article>
+    </section>
+  ) : (
+    <p>Profile entry not found. Create <code>src/content/profile/about.md</code>.</p>
+  )}
+</Layout>

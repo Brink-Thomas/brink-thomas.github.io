@@ -1,0 +1,39 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection, render } from 'astro:content';
+
+const projects = await getCollection('projects');
+---
+
+<Layout title="Thomas Brink | Portfolio">
+  <h1>Featured Projects</h1>
+  <p style="color: var(--text-muted);">Applications, tools, and code repositories.</p>
+
+  {projects.length === 0 && (
+    <p style="margin-top: 2rem;">No projects added yet. Add one via Pages CMS!</p>
+  )}
+
+  <div style="margin-top: 2rem;">
+    {projects.map(async (project) => {
+      const { Content } = await render(project);
+      return (
+        <article class="card">
+          <h2 style="margin-top: 0;">{project.data.title}</h2>
+          <p>{project.data.summary}</p>
+          {project.data.tags && (
+            <p style="font-size: 0.85rem; color: var(--text-muted);">
+              <strong>Stack:</strong> {project.data.tags}
+            </p>
+          )}
+          <div style="display: flex; gap: 1rem; margin: 1rem 0;">
+            {project.data.liveUrl && <a href={project.data.liveUrl} target="_blank">Live Demo &rarr;</a>}
+            {project.data.repoUrl && <a href={project.data.repoUrl} target="_blank">Source Code &rarr;</a>}
+          </div>
+          <div>
+            <Content />
+          </div>
+        </article>
+      );
+    })}
+  </div>
+</Layout>
