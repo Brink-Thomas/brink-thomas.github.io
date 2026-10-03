@@ -1,7 +1,7 @@
 ---
 name: Thomas Brink
 role: Software Developer & Engineer
-email: thomas@thomasbrink.be
+email: contact@thomasbrink.be
 github: https://github.com/brink-thomas
 ---
 ## Summary
