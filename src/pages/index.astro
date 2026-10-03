@@ -1,31 +1,44 @@
 ---
+// src/pages/index.astro
 import Layout from '../layouts/Layout.astro';
-
 import { getEntry, render } from 'astro:content';
 
 const profile = await getEntry('profile', 'about');
 const { Content } = profile ? await render(profile) : { Content: null };
 ---
 
-<Layout title="Thomas Brink | CV">
+<Layout title="Thomas Brink | CV & About">
   {profile ? (
-    <section>
-      <h1 style="font-size: 2.5rem; margin-bottom: 0.25rem;">{profile.data.name}</h1>
-      <p style="font-size: 1.25rem; color: var(--accent); margin-top: 0;">
-        {profile.data.role}
-      </p>
-      
-      <p style="color: var(--text-muted);">
-        {profile.data.email && <span>✉️ {profile.data.email} &bull; </span>}
-        {profile.data.github && <a href={profile.data.github} target="_blank">GitHub Profile</a>}
-      </p>
-      <hr style="border: 0; border-top: 1px solid var(--card); margin: 2rem 0;" />
-      
-      <article>
+    <div class="space-y-8">
+      <section class="space-y-3">
+        <h1 class="text-4xl font-extrabold tracking-tight text-white sm:text-5xl">
+          {profile.data.name}
+        </h1>
+        <p class="text-xl text-sky-400 font-medium">
+          {profile.data.role}
+        </p>
+
+        <div class="flex flex-wrap gap-4 pt-2 text-sm text-slate-400">
+          {profile.data.email && (
+            <a href={`mailto:${profile.data.email}`} class="hover:text-sky-400 transition-colors">
+              ✉️ {profile.data.email}
+            </a>
+          )}
+          {profile.data.github && (
+            <a href={profile.data.github} target="_blank" rel="noreferrer" class="hover:text-sky-400 transition-colors">
+              ⚡ GitHub Profile &rarr;
+            </a>
+          )}
+        </div>
+      </section>
+
+      <hr class="border-slate-800" />
+
+      <article class="prose prose-invert prose-slate max-w-none">
         {Content && <Content />}
       </article>
-    </section>
+    </div>
   ) : (
-    <p>Profile entry not found. Create <code>src/content/profile/about.md</code>.</p>
+    <p class="text-amber-400">No profile found at <code>src/content/profile/about.md</code>.</p>
   )}
 </Layout>

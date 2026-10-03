@@ -1,39 +1,59 @@
 ---
+// src/pages/portfolio.astro
 import Layout from '../layouts/Layout.astro';
 import { getCollection, render } from 'astro:content';
 
 const projects = await getCollection('projects');
 ---
 
-<Layout title="Thomas Brink | Portfolio">
-  <h1>Featured Projects</h1>
-  <p style="color: var(--text-muted);">Applications, tools, and code repositories.</p>
+<Layout title="Thomas Brink | Portfolio Projects">
+  <div class="space-y-8">
+    <header class="space-y-2">
+      <h1 class="text-3xl font-extrabold text-white tracking-tight sm:text-4xl">Featured Projects</h1>
+      <p class="text-slate-400 text-lg">A collection of open-source tools, case studies, and web platforms.</p>
+    </header>
 
-  {projects.length === 0 && (
-    <p style="margin-top: 2rem;">No projects added yet. Add one via Pages CMS!</p>
-  )}
+    {projects.length === 0 ? (
+      <p class="text-slate-400">No projects added yet.</p>
+    ) : (
+      <div class="grid gap-6 sm:grid-cols-2">
+        {projects.map(async (project) => {
+          const { Content } = await render(project);
+          const tags = project.data.tags ? project.data.tags.split(',').map((t: string) => t.trim()) : [];
 
-  <div style="margin-top: 2rem;">
-    {projects.map(async (project) => {
-      const { Content } = await render(project);
-      return (
-        <article class="card">
-          <h2 style="margin-top: 0;">{project.data.title}</h2>
-          <p>{project.data.summary}</p>
-          {project.data.tags && (
-            <p style="font-size: 0.85rem; color: var(--text-muted);">
-              <strong>Stack:</strong> {project.data.tags}
-            </p>
-          )}
-          <div style="display: flex; gap: 1rem; margin: 1rem 0;">
-            {project.data.liveUrl && <a href={project.data.liveUrl} target="_blank">Live Demo &rarr;</a>}
-            {project.data.repoUrl && <a href={project.data.repoUrl} target="_blank">Source Code &rarr;</a>}
-          </div>
-          <div>
-            <Content />
-          </div>
-        </article>
-      );
-    })}
+          return (
+            <article class="flex flex-col justify-between bg-slate-900 border border-slate-800 rounded-xl p-6 hover:border-slate-700 transition-colors">
+              <div class="space-y-3">
+                <h2 class="text-xl font-bold text-white">{project.data.title}</h2>
+                <p class="text-sm text-slate-300 leading-relaxed">{project.data.summary}</p>
+                
+                {tags.length > 0 && (
+                  <div class="flex flex-wrap gap-1.5 pt-2">
+                    {tags.map((tag: string) => (
+                      <span class="text-xs px-2 py-0.5 rounded-full bg-slate-800 text-sky-300 font-mono">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <div class="flex gap-4 pt-6 mt-6 border-t border-slate-800/80 text-sm font-semibold">
+                {project.data.liveUrl && (
+                  <a href={project.data.liveUrl} target="_blank" rel="noreferrer" class="text-sky-400 hover:text-sky-300">
+                    Live Demo &rarr;
+                  </a>
+                )}
+                {project.data.repoUrl && (
+                  <a href={project.data.repoUrl} target="_blank" rel="noreferrer" class="text-slate-400 hover:text-white">
+                    Code &rarr;
+                  </a>
+                )}
+              </div>
+            </article>
+          );
+        })}
+      </div>
+    )}
   </div>
 </Layout>
