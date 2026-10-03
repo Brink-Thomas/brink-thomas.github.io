@@ -1,9 +1,9 @@
 ---
-title: "First Project"
-summary: "A demo project to initialize the portfolio collection."
-liveUrl: "https://github.com/brink-thomas"
-repoUrl: "https://github.com/brink-thomas"
-tags: "Astro, TypeScript"
+title: Portfolio website
+summary: Portfolio website showcasing my projects and CV built with astro, pages
+  cms, and tailwind hosted on github pages
+liveUrl: https://brink-thomas.github.io
+repoUrl: https://github.com/Brink-Thomas/brink-thomas.github.io
+tags: Astro, TypeScript, Tailwind, Pages cms
 ---
-
-Welcome to my portfolio! This is a placeholder project created to initialize the collection. You can edit or delete this entry in Pages CMS.
+This website is the first project I added to the portfolio because it's a good opportunity to test and learn how to work using Astro and Typescript.
