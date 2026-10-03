@@ -16,46 +16,54 @@ const currentPath = Astro.url.pathname;
 ---
 
 <!doctype html>
-<html lang="en" class="scroll-smooth">
+<html lang="en" class="u-scroll-smooth">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
     <meta name="description" content={description} />
   </head>
-  <body class="min-h-screen flex flex-col justify-between max-w-4xl mx-auto px-6 py-12">
-    <div>
+  <body class="o-site-layout">
+    <div class="o-site-layout__body">
       <!-- Top Navigation -->
-      <header class="flex items-center justify-between border-b border-slate-800 pb-6 mb-12">
-        <a href="/" class="text-xl font-bold tracking-tight text-white hover:text-sky-400 transition-colors">
-          Thomas Brink<span class="text-sky-400">.</span>
+      <header class="c-navbar">
+        <a href="/" class="c-navbar__brand">
+          Thomas Brink<span class="c-navbar__brand-accent">.</span>
         </a>
 
-        <nav class="flex gap-6 text-sm font-medium">
-          <a 
-            href="/" 
-            class={currentPath === "/" ? "text-sky-400 font-semibold" : "text-slate-400 hover:text-slate-200 transition-colors"}
-          >
-            About & CV
-          </a>
-          <a 
-            href="/portfolio" 
-            class={currentPath.startsWith("/portfolio") ? "text-sky-400 font-semibold" : "text-slate-400 hover:text-slate-200 transition-colors"}
-          >
-            Portfolio
-          </a>
+        <nav class="c-nav">
+          <ul class="c-nav__list">
+            <li class="c-nav__item">
+              <a 
+                href="/" 
+                class:list={["c-nav__link", { "is-active": currentPath === "/" }]}
+              >
+                About & CV
+              </a>
+            </li>
+            <li class="c-nav__item">
+              <a 
+                href="/portfolio" 
+                class:list={["c-nav__link", { "is-active": currentPath.startsWith("/portfolio") }]}
+              >
+                Portfolio
+              </a>
+            </li>
+          </ul>
         </nav>
       </header>
 
       <!-- Main Page Content injected here -->
-      <main>
+      <main class="o-site-layout__main">
         <slot />
       </main>
     </div>
 
     <!-- Footer -->
-    <footer class="mt-20 pt-6 border-t border-slate-900 text-xs text-slate-500 text-center">
-      © {new Date().getFullYear()} Thomas Brink. Built with Astro & Pages CMS.
+    <footer class="c-footer">
+      <p class="c-footer__copyright">
+        © {new Date().getFullYear()} Thomas Brink. Built with Astro & Pages CMS.
+      </p>
     </footer>
   </body>
 </html>

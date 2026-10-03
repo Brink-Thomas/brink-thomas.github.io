@@ -1,51 +1,27 @@
-media:
-  input: public/images
-  output: /images
-
-content:
+collections:
   - name: profile
-    label: "About Me / CV"
+    label: About & CV
+    path: src/content/profile
     type: file
-    path: src/content/profile/about.md
+    file: src/content/profile/about.md
     fields:
       - name: name
-        label: "Full Name"
+        label: Full Name
         type: string
-        required: true
       - name: role
-        label: "Headline / Role"
+        label: Current Role / Title
         type: string
       - name: email
-        label: "Contact Email"
+        label: Email Address
         type: string
       - name: github
-        label: "GitHub Profile Link"
+        label: GitHub URL
         type: string
+      - name: skills
+        label: Core Skills
+        type: list
+        field:
+          type: string
       - name: body
-        label: "Biography / Experience / CV Content"
-        type: rich-text
-
-  - name: portfolio
-    label: "Portfolio Projects"
-    type: collection
-    path: src/content/projects
-    fields:
-      - name: title
-        label: "Project Title"
-        type: string
-        required: true
-      - name: summary
-        label: "Short Description"
-        type: string
-      - name: liveUrl
-        label: "Live Demo URL"
-        type: string
-      - name: repoUrl
-        label: "Source Code URL"
-        type: string
-      - name: tags
-        label: "Tech Stack (comma separated)"
-        type: string
-      - name: body
-        label: "Detailed Case Study"
+        label: CV Body Content
         type: rich-text

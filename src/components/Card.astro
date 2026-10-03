@@ -1,0 +1,54 @@
+---
+// src/components/ProjectCard.astro
+interface Props {
+  title: string;
+  summary: string;
+  tags?: string;
+  liveUrl?: string;
+  repoUrl?: string;
+}
+
+const { title, summary, tags, liveUrl, repoUrl } = Astro.props;
+
+const rawTags = tags ? tags.split(',').map((t) => t.trim()) : [];
+const normalizedTags = rawTags.map((t) => t.toLowerCase());
+---
+
+<article 
+  class="c-project-card"
+  data-tags={normalizedTags.join(',')}
+>
+  <div class="c-project-card__body">
+    <h2 class="c-project-card__title">{title}</h2>
+    <p class="c-project-card__summary">{summary}</p>
+    
+    {rawTags.length > 0 && (
+      <div class="c-project-card__tags">
+        {rawTags.map((tag) => (
+          <a 
+            href={`/portfolio?tag=${encodeURIComponent(tag.toLowerCase())}`}
+            class="c-badge c-badge--pill c-badge--interactive"
+          >
+            {tag}
+          </a>
+        ))}
+      </div>
+    )}
+  </div>
+
+  <!-- Optional slot if you ever want to pass rich content inside the card -->
+  <slot />
+
+  <div class="c-project-card__actions">
+    {liveUrl && (
+      <a href={liveUrl} target="_blank" rel="noreferrer" class="c-project-card__link c-project-card__link--primary">
+        Live Demo &rarr;
+      </a>
+    )}
+    {repoUrl && (
+      <a href={repoUrl} target="_blank" rel="noreferrer" class="c-project-card__link c-project-card__link--secondary">
+        Code &rarr;
+      </a>
+    )}
+  </div>
+</article>

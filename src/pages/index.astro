@@ -9,36 +9,57 @@ const { Content } = profile ? await render(profile) : { Content: null };
 
 <Layout title="Thomas Brink | CV & About">
   {profile ? (
-    <div class="space-y-8">
-      <section class="space-y-3">
-        <h1 class="text-4xl font-extrabold tracking-tight text-white sm:text-5xl">
+    <div class="o-stack o-stack--lg">
+      <!-- Profile Header Component -->
+      <section class="c-profile-header">
+        <h1 class="c-profile-header__name">
           {profile.data.name}
         </h1>
-        <p class="text-xl text-sky-400 font-medium">
+        <p class="c-profile-header__role">
           {profile.data.role}
         </p>
 
-        <div class="flex flex-wrap gap-4 pt-2 text-sm text-slate-400">
+        <div class="c-profile-header__contacts">
           {profile.data.email && (
-            <a href={`mailto:${profile.data.email}`} class="hover:text-sky-400 transition-colors">
+            <a href={`mailto:${profile.data.email}`} class="c-profile-header__link">
               ✉️ {profile.data.email}
             </a>
           )}
           {profile.data.github && (
-            <a href={profile.data.github} target="_blank" rel="noreferrer" class="hover:text-sky-400 transition-colors">
+            <a href={profile.data.github} target="_blank" rel="noreferrer" class="c-profile-header__link">
               ⚡ GitHub Profile &rarr;
             </a>
           )}
         </div>
       </section>
 
-      <hr class="border-slate-800" />
+      <!-- Clickable Skills Badges Component -->
+      {profile.data.skills && (
+        <section class="c-skills-group">
+          <h2 class="c-skills-group__title">Key Skills & Technologies</h2>
+          <div class="c-skills-group__list">
+            {profile.data.skills.map((skill: string) => (
+              <a
+                href={`/portfolio?tag=${encodeURIComponent(skill.toLowerCase())}`}
+                class="c-badge c-badge--interactive"
+              >
+                {skill} &rarr;
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
 
-      <article class="prose prose-invert prose-slate max-w-none">
+      <hr class="c-divider" />
+
+      <!-- Markdown body rendered with Typography -->
+      <article class="c-prose">
         {Content && <Content />}
       </article>
     </div>
   ) : (
-    <p class="text-amber-400">No profile found at <code>src/content/profile/about.md</code>.</p>
+    <p class="c-notice c-notice--warning">
+      No profile found at <code>src/content/profile/about.md</code>.
+    </p>
   )}
 </Layout>

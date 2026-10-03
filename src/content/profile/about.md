@@ -3,6 +3,7 @@ name: "Thomas Brink"
 role: "Software Developer & Engineer"
 email: "your.email@example.com"
 github: "https://github.com/thomasbrink"
+skills: ["TypeScript", "Astro", "Tailwind CSS", "Node.js", "Python", "Git"]
 ---
 
 ## Summary

@@ -7,45 +7,64 @@ const projects = await getCollection('projects');
 ---
 
 <Layout title="Thomas Brink | Portfolio Projects">
-  <div class="space-y-8">
-    <header class="space-y-2">
-      <h1 class="text-3xl font-extrabold text-white tracking-tight sm:text-4xl">Featured Projects</h1>
-      <p class="text-slate-400 text-lg">A collection of open-source tools, case studies, and web platforms.</p>
+  <div class="o-stack o-stack--lg">
+    <header class="c-section-header">
+      <h1 class="c-section-header__title">Featured Projects</h1>
+      <p class="c-section-header__description">
+        A collection of open-source tools, case studies, and web platforms.
+      </p>
+
+      <!-- Active Filter Banner (Controlled by client JS) -->
+      <div id="filter-banner" class="c-filter-banner u-hidden">
+        <span class="c-filter-banner__text">
+          Filtering by skill: <strong id="filter-name" class="c-filter-banner__highlight"></strong>
+        </span>
+        <a href="/portfolio" class="c-filter-banner__reset">
+          Clear filter ✕
+        </a>
+      </div>
     </header>
 
     {projects.length === 0 ? (
-      <p class="text-slate-400">No projects added yet.</p>
+      <p class="c-notice">No projects added yet.</p>
     ) : (
-      <div class="grid gap-6 sm:grid-cols-2">
+      <div id="projects-grid" class="o-grid o-grid--2col">
         {projects.map(async (project) => {
           const { Content } = await render(project);
-          const tags = project.data.tags ? project.data.tags.split(',').map((t: string) => t.trim()) : [];
+          const rawTags = project.data.tags ? project.data.tags.split(',').map((t: string) => t.trim()) : [];
+          const normalizedTags = rawTags.map((t: string) => t.toLowerCase());
 
           return (
-            <article class="flex flex-col justify-between bg-slate-900 border border-slate-800 rounded-xl p-6 hover:border-slate-700 transition-colors">
-              <div class="space-y-3">
-                <h2 class="text-xl font-bold text-white">{project.data.title}</h2>
-                <p class="text-sm text-slate-300 leading-relaxed">{project.data.summary}</p>
+            <article 
+              class="c-project-card"
+              data-tags={normalizedTags.join(',')}
+            >
+              <div class="c-project-card__body">
+                <h2 class="c-project-card__title">{project.data.title}</h2>
+                <p class="c-project-card__summary">{project.data.summary}</p>
                 
-                {tags.length > 0 && (
-                  <div class="flex flex-wrap gap-1.5 pt-2">
-                    {tags.map((tag: string) => (
-                      <span class="text-xs px-2 py-0.5 rounded-full bg-slate-800 text-sky-300 font-mono">
+                {rawTags.length > 0 && (
+                  <div class="c-project-card__tags">
+                    {rawTags.map((tag: string) => (
+                      <a 
+                        href={`/portfolio?tag=${encodeURIComponent(tag.toLowerCase())}`}
+                        class="c-badge c-badge--pill c-badge--interactive"
+                      >
                         {tag}
-                      </span>
+                      </a>
                     ))}
                   </div>
                 )}
               </div>
 
-              <div class="flex gap-4 pt-6 mt-6 border-t border-slate-800/80 text-sm font-semibold">
+              <div class="c-project-card__actions">
                 {project.data.liveUrl && (
-                  <a href={project.data.liveUrl} target="_blank" rel="noreferrer" class="text-sky-400 hover:text-sky-300">
+                  <a href={project.data.liveUrl} target="_blank" rel="noreferrer" class="c-project-card__link c-project-card__link--primary">
                     Live Demo &rarr;
                   </a>
                 )}
                 {project.data.repoUrl && (
-                  <a href={project.data.repoUrl} target="_blank" rel="noreferrer" class="text-slate-400 hover:text-white">
+                  <a href={project.data.repoUrl} target="_blank" rel="noreferrer" class="c-project-card__link c-project-card__link--secondary">
                     Code &rarr;
                   </a>
                 )}
@@ -57,3 +76,28 @@ const projects = await getCollection('projects');
     )}
   </div>
 </Layout>
+
+<script>
+  // Read ?tag= from the URL and toggle visibility
+  const params = new URLSearchParams(window.location.search);
+  const activeTag = params.get('tag')?.toLowerCase();
+
+  if (activeTag) {
+    const banner = document.getElementById('filter-banner');
+    const filterName = document.getElementById('filter-name');
+    const cards = document.querySelectorAll<HTMLElement>('.c-project-card');
+
+    if (banner && filterName) {
+      banner.classList.remove('u-hidden');
+      banner.classList.add('u-flex');
+      filterName.textContent = activeTag;
+    }
+
+    cards.forEach((card) => {
+      const cardTags = card.dataset.tags ? card.dataset.tags.split(',') : [];
+      if (!cardTags.includes(activeTag)) {
+        card.style.display = 'none';
+      }
+    });
+  }
+</script>

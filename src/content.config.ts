@@ -1,4 +1,5 @@
-import { defineCollection, z } from 'astro:content';
+import { defineCollection } from 'astro:content';
+import { z } from 'astro/zod'
 import { glob } from 'astro/loaders';
 
 const profile = defineCollection({
@@ -8,6 +9,7 @@ const profile = defineCollection({
     role: z.string().optional(),
     email: z.string().optional(),
     github: z.string().optional(),
+    skills: z.array(z.string()).optional(),
   }),
 });
 
